@@ -16,7 +16,7 @@ Search elements within your page using jQuery.
      hit:function(elem, results, search) { $(elem).css('background-color', 'green'); },
      nohit:function(elem, results, search) { $(elem).css('background-color', 'red');},
      partialhit:function(elem, results, search) { $(elem).css('background-color', 'yellow');},
-     reset:function(elems, search) { $(elem).css('background-color', 'white');}
+     reset:function(elems, search) { $(elems).css('background-color', 'white');}
     });
     results=search.search("Dude what's your problem?");
 

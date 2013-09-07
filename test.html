@@ -1,0 +1,115 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jQuery.srch.min.js"></script>
+<title>Search Test</title>
+<style type="text/css">
+body {
+ padding:0px;
+ width:100%;
+ margin:0px;
+ font-family:'Source Sans Pro', 'Open Sans', Tahoma;
+ font-size:14px;
+}
+div {
+ padding:5px;
+ width:100%;
+ -webkit-transition: background 300ms ease;
+ -moz-transition: background 300ms ease;
+ -ms-transition: background 300ms ease;
+ -o-transition: background 300ms ease;
+ transition: background 300ms ease;
+}
+.odd {
+ background-color:#dfdcdf;
+}
+.even {
+ background-color:#afacaf;
+}
+#searcher {
+ width:99%;
+ outline:none;
+ border:1px solid #afacaf;
+ margin:0px;
+ padding:2px;
+ font-family:'Source Sans Pro', 'Open Sans', Tahoma;
+ font-size:14px;
+}
+#fpn {
+ display:none;
+ border-collapse:collapse;
+ width:100%;
+}
+#fpn td{
+ width:33%;
+ padding-left:10px;
+ padding-right:10px;
+ height:300px;
+ vertical-align:text-top;
+ border-bottom:1px dashed #afacaf;
+}
+#fpn th {
+ height:20px;
+ background-color:#afacaf;
+}
+#fpn th:nth-child(2) {
+ border-left:1px dashed #dfdcdf;
+ border-right:1px dashed #dfdcdf;
+}
+#fpn td:nth-child(2) {
+ border-left:1px dashed #afacaf;
+ border-right:1px dashed #afacaf;
+}
+#fpn td b {
+ display:block;
+ font-weight:normal;
+ font-style:italic;
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+ calli=$.srch({
+  selector:".search, #searchthis",
+  not:"#dontsearchthis",
+  hit:function(elem, results, search){$(elem).fadeTo(300, 1).css({'background-color':'#00cc00'});},
+  nohit:function(elem, results, search) {$(elem).fadeTo(300, 0).css({'background-color':'#cc0000'});},
+  partialhit:function(elem, results, search) {$(elem).fadeTo(300, results.length/search.split(' ').length).css({'background-color':'#cccc00'});},
+  reset:function(elems, search) {$(elems).fadeTo(300, 1).css({'background-color':''});}
+ });
+ $('#searcher').keyup(function() {
+  results=calli.search($(this).val());
+  if(results==false) {
+   $('#fpn').fadeOut(300);
+  } else {
+   $('#fpn').fadeIn(300, function() {
+    $('#fpn td').html('');
+    $.each(results.hits, function() {
+	 $('#fpn #hit').append('<b>'+$(this).text()+'</b>');
+	});
+	$.each(results.partials, function() {
+	 $('#fpn #partial').append('<b>'+$(this).text()+'</b>');
+	});
+	$.each(results.nohits, function() {
+	 $('#fpn #nohit').append('<b>'+$(this).text()+'</b>');
+	});
+   });
+  }
+ });
+ $('#searcher').focus();
+});
+</script>
+</head>
+<body>
+<div id="searchthis" class="odd">Hey man how's it going? I haven't talked to you for a while.</div>
+<div id="dontsearchthis" class="search even">Dude! What's going on?! I've been wanting to talk to you!</div>
+<div class="search odd">Dude!</div>
+<div class="search even">Huh? What are you talking about, dude?</div>
+<div class="search odd">Talk to me!</div>
+<div class="search even">Dude let's talk!</div>
+<div class="odd" style="text-align:center;padding-left:0px;padding-right:0px;"><input type="text" value="" id="searcher" placeholder="Search" /></div>
+<table id="fpn">
+<tr><th>Full</th><th>Partial</th><th>None</th></tr>
+<tr><td id="hit"></td><td id="partial"></td><td id="nohit"></td></tr>
+</table>
+</body>
+</html>
